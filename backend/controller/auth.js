@@ -1,10 +1,25 @@
 const { StatusCodes } = require("http-status-codes");
-const { BadRequestError } = require("../errors");
+const { BadRequestError, UnauthenticatedError } = require("../errors");
 const { generateTokenAndCookie } = require("../middleware/generateJWT");
 const User = require("../model/user");
+const bcrypt = require("bcryptjs");
 
 const login = async (req, res) => {
-  res.status(StatusCodes.OK).send("login page");
+  const { userName, password } = req.body;
+  if (!userName || !password) {
+    throw new BadRequestError("provide userName and password");
+  }
+  const user = await User.findOne({ userName });
+
+  if (!user) {
+    throw new UnauthenticatedError("Invalid Credentials");
+  }
+  const comp = await bcrypt.compare(password, user.password);
+  if (!comp) {
+    throw new UnauthenticatedError("Invalid Credentials");
+  }
+  generateTokenAndCookie(userName, res);
+  res.status(StatusCodes.OK).json(user);
 };
 
 const signup = async (req, res) => {
@@ -35,7 +50,8 @@ const signup = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  res.status(StatusCodes.OK).send("logout page");
+  res.clearCookie("jwt");
+  res.status(StatusCodes.OK).send("logged out successfully");
 };
 
 module.exports = { login, signup, logout };
