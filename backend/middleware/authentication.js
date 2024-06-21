@@ -1,21 +1,30 @@
 const jwt = require("jsonwebtoken");
-const { UnauthenticatedError } = require("../errors");
-
+const { UnauthenticatedError, NotFoundError } = require("../errors");
+const User = require("../model/user");
 const auth = async (req, res, next) => {
-  // check header
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer")) {
-    throw new UnauthenticatedError("Authentication invalid");
-  }
-  const token = authHeader.split(" ")[1];
-
   try {
+    const token = req.cookies.jwt;
+    // console.log(token);
+    if (!token) {
+      throw new UnauthenticatedError("No token provided");
+    }
     const payload = jwt.verify(token, process.env.JWT_SECRET);
+    if (!payload) {
+      throw new UnauthenticatedError("Authentication invalid");
+    }
+    // console.log(payload);
     // attach the user to the job routes
-    req.user = { userId: payload.userId, name: payload.name };
+    const user = await User.findOne({ userName: payload.userID }).select(
+      `-password`
+    );
+    // console.log(user);
+    if (!user) {
+      throw new NotFoundError("user not found");
+    }
+    req.user = user;
     next();
   } catch (error) {
-    throw new UnauthenticatedError("Authentication invalid");
+    next(error);
   }
 };
 
