@@ -1,24 +1,27 @@
 const mongoose = require("mongoose");
-
+const bcrypt = require("bcryptjs");
 const UserSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: true,
+    required: [true, "Please provide name"],
   },
   userName: {
     type: String,
-    required: true,
+    required: [true, "Please provide username"],
     unique: true,
   },
   password: {
     type: String,
-    required: true,
-    minlength: 6,
+    required: [true, "Please provide password"],
+    minlength: [6, "Password length must be greater then 6"],
   },
   gender: {
     type: String,
-    required: true,
-    enum: ["male", "female", "others"],
+    required: [true, `Please provide gender`],
+    enum: {
+      values: ["male", "female", "others"],
+      message: "Gender must be either male, female, or others",
+    },
   },
   profilePic: {
     type: String,
