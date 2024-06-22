@@ -14,9 +14,11 @@ const connectDB = require("./db/connect");
 
 const authRouter = require("./routes/auth");
 const messageRouter = require("./routes/message");
+const userRouter = require("./routes/user");
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/messages", messageRouter);
+app.use("/api/v1/users", userRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
