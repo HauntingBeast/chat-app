@@ -1,63 +1,50 @@
-import React, { useState } from "react";
+import React from "react";
 
-const GenderCheckbox = () => {
-  const [selectedGender, setSelectedGender] = useState(null);
-
-  const handleCheckboxChange = (gender) => {
-    if (selectedGender === gender) {
-      setSelectedGender(null);
-    } else {
-      setSelectedGender(gender);
-    }
-  };
-
+const GenderCheckbox = ({ onCheckboxChange, selectedGender }) => {
   return (
     <div className="flex p-1">
       <div className="form-control">
         <label
           className={`label gap-2 cursor-pointer ${
-            selectedGender === "male" ? "text-blue-600" : ""
+            selectedGender === "male" ? "selected" : ""
           }`}
-          onClick={() => handleCheckboxChange("male")}
         >
           <span className="label-text">Male</span>
           <input
             type="checkbox"
             className="checkbox border-slate-400"
             checked={selectedGender === "male"}
-            onChange={() => handleCheckboxChange("male")}
+            onChange={() => onCheckboxChange("male")}
           />
         </label>
       </div>
       <div className="form-control">
         <label
           className={`label gap-2 cursor-pointer ${
-            selectedGender === "female" ? "text-blue-600" : ""
+            selectedGender === "female" ? "selected" : ""
           }`}
-          onClick={() => handleCheckboxChange("female")}
         >
           <span className="label-text">Female</span>
           <input
             type="checkbox"
             className="checkbox border-slate-400"
             checked={selectedGender === "female"}
-            onChange={() => handleCheckboxChange("female")}
+            onChange={() => onCheckboxChange("female")}
           />
         </label>
       </div>
       <div className="form-control">
         <label
           className={`label gap-2 cursor-pointer ${
-            selectedGender === "others" ? "text-blue-600" : ""
+            selectedGender === "others" ? "selected" : ""
           }`}
-          onClick={() => handleCheckboxChange("others")}
         >
           <span className="label-text">Others</span>
           <input
             type="checkbox"
             className="checkbox border-slate-400"
             checked={selectedGender === "others"}
-            onChange={() => handleCheckboxChange("others")}
+            onChange={() => onCheckboxChange("others")}
           />
         </label>
       </div>

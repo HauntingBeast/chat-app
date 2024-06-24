@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
+  const [userName, setUsername] = useState("");
+  const [password, setpassword] = useState("");
+  const { loading, login } = useLogin();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await login(userName, password);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gray-900 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-40 ">
@@ -11,16 +21,18 @@ const Login = () => {
           Enter Login Details
         </h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <label className="label p-2 ">
-              <span className="text-base label-text">Username</span>
+              <span className="text-base label-text">UserName</span>
             </label>
             <input
-              className="w-full rounded-3xl border-none input input-bordered h-10 bg-opacity-50 px-6 py-2 text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
+              className="w-full rounded-3xl border-none input input-bordered h-10 bg-opacity-50 px-6 py-2 text-slate-200 placeholder-slate-400 shadow-lg outline-none backdrop-blur-md"
               type="text"
               name="name"
-              placeholder="Enter Username"
+              placeholder="Enter UserName"
+              value={userName}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div>
@@ -30,22 +42,29 @@ const Login = () => {
             <input
               type="password"
               placeholder="Enter Password"
-              className="w-full rounded-3xl border-none input input-bordered h-10 bg-opacity-50 px-6 py-2 text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
+              className="w-full rounded-3xl border-none input input-bordered h-10 bg-opacity-50 px-6 py-2 text-slate-200 placeholder-slate-00 shadow-lg outline-none backdrop-blur-md"
+              value={password}
+              onChange={(e) => setpassword(e.target.value)}
             />
           </div>
 
-          <a
-            href="#"
+          <Link
+            to={"/signup"}
             className="text-sm hover:underline hover:text-blue-600 mt-2 inline-block"
           >
             {"Don't"} have an account?
-          </a>
+          </Link>
           <div>
             <button
               type="submit"
-              className="w-full rounded-3xl border-none h-10 bg-black bg-opacity-20 px-6 py-2 text-inherit text-white placeholder-slate-200 shadow-lg outline-none backdrop-blur-md mt-2"
+              className="w-full rounded-3xl border-none h-10 bg-black bg-opacity-20 px-6 py-2  text-white placeholder-slate-200 shadow-lg outline-none backdrop-blur-md mt-2"
+              disabled={loading}
             >
-              Login
+              {loading ? (
+                <span className=" loading loading-spinner"></span>
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>
