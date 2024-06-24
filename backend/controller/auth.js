@@ -19,7 +19,12 @@ const login = async (req, res) => {
     throw new UnauthenticatedError("Invalid Credentials");
   }
   generateTokenAndCookie(userName, res);
-  res.status(StatusCodes.OK).json(user);
+  res.status(StatusCodes.OK).json({
+    _id: user._id,
+    fullName: user.fullName,
+    username: user.username,
+    profilePic: user.profilePic,
+  });
 };
 
 const signup = async (req, res) => {
@@ -46,12 +51,17 @@ const signup = async (req, res) => {
 
   generateTokenAndCookie(userName, res);
 
-  res.status(StatusCodes.CREATED).json(newUser);
+  res.status(StatusCodes.CREATED).json({
+    _id: newUser._id,
+    fullName: newUser.fullName,
+    userName: newUser.userName,
+    profilePic: newUser.profilePic,
+  });
 };
 
 const logout = async (req, res) => {
   res.clearCookie("jwt");
-  res.status(StatusCodes.OK).send("logged out successfully");
+  res.status(StatusCodes.OK).json("msg:logged out successfully");
 };
 
 module.exports = { login, signup, logout };
