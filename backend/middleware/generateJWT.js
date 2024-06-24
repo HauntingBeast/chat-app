@@ -10,6 +10,7 @@ const generateTokenAndCookie = (userID, res) => {
     sameSite: true,
     secure: process.env.NODE_ENV !== "development",
   });
+  // console.log(res);
 };
 
 module.exports = { generateTokenAndCookie };

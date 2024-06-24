@@ -19,10 +19,11 @@ const login = async (req, res) => {
     throw new UnauthenticatedError("Invalid Credentials");
   }
   generateTokenAndCookie(userName, res);
+
   res.status(StatusCodes.OK).json({
     _id: user._id,
     fullName: user.fullName,
-    username: user.username,
+    username: user.userName,
     profilePic: user.profilePic,
   });
 };
@@ -50,7 +51,6 @@ const signup = async (req, res) => {
   });
 
   generateTokenAndCookie(userName, res);
-
   res.status(StatusCodes.CREATED).json({
     _id: newUser._id,
     fullName: newUser.fullName,

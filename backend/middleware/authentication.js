@@ -3,6 +3,8 @@ const { UnauthenticatedError, NotFoundError } = require("../errors");
 const User = require("../model/user");
 const auth = async (req, res, next) => {
   try {
+    // console.log(req.cookies);
+
     const token = req.cookies.jwt;
     // console.log(token);
     if (!token) {
