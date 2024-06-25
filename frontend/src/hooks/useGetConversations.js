@@ -9,8 +9,12 @@ const useGetConversations = () => {
     const getConversations = async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:8000/api/v1/users");
+        const res = await fetch("http://localhost:8000/api/v1/users", {
+          credentials: "include",
+        });
         const data = await res.json();
+        const cookie = await res.cookies;
+        // console.log(cookie);
         if (!res.ok) {
           throw new Error(data.msg);
         }

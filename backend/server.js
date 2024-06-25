@@ -7,7 +7,13 @@ const cookieParser = require("cookie-parser");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Allow requests from this origin
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  })
+);
+
 app.use(cookieParser());
 app.use(express.json());
 const connectDB = require("./db/connect");
